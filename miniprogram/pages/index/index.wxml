@@ -55,5 +55,12 @@
     </navigator>
   </view>
 
+   <!-- 我的 -->
+  <view class="uploader">
+    <navigator url="../home/home" open-type="navigate" class="uploader-text">
+      <text>Hello World</text>
+    </navigator>
+  </view>
+
 
 </view>

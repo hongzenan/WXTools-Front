@@ -1,4 +1,6 @@
 // pages/deployFunctions/deployFunctions.js
+const app = getApp()
+
 Page({
 
   /**
@@ -64,12 +66,31 @@ Page({
 
   },
 
+  doTest: function() {
+    var param = {name: "kane"}
+    wx.request({
+      url: 'http://127.0.0.1:8080/wxtools/test',//请求地址路径
+      data: param,//请求参数
+      method:"get",//请求方式
+      header:{//请求头
+        "content-type": "application/json"  //"application/x-www-form-urlencoded"
+      },
+      success(res){
+        if(res.data.success){
+          console.log(res)
+        }else{
+          console.log(res)
+        }
+      }
+    })
+  },
+
   // 上传图片
   doUpload: function () {
     // 选择图片
     wx.chooseImage({
       count: 1,
-      sizeType: ['compressed'],
+      sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
       success: function (res) {
 
@@ -79,33 +100,43 @@ Page({
 
         const filePath = res.tempFilePaths[0]
 
-        // 上传图片
-        const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
-        wx.cloud.uploadFile({
-          cloudPath,
-          filePath,
-          success: res => {
-            console.log('[上传文件] 成功：', res)
-
-            app.globalData.fileID = res.fileID
-            app.globalData.cloudPath = cloudPath
-            app.globalData.imagePath = filePath
-
-            wx.navigateTo({
-              url: '../storageConsole/storageConsole'
-            })
-          },
-          fail: e => {
-            console.error('[上传文件] 失败：', e)
-            wx.showToast({
-              icon: 'none',
-              title: '上传失败',
-            })
-          },
-          complete: () => {
-            wx.hideLoading()
+        wx.uploadFile({
+          filePath: filePath,
+          name: 'file',
+          url: 'http://localhost:8080/wxtools/fileUpload',
+          success: function(res) {
+            var data = res.data
+            console.log(data)
           }
         })
+
+        // // 上传图片
+        // const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
+        // wx.cloud.uploadFile({
+        //   cloudPath,
+        //   filePath,
+        //   success: res => {
+        //     console.log('[上传文件] 成功：', res)
+
+        //     app.globalData.fileID = res.fileID
+        //     app.globalData.cloudPath = cloudPath
+        //     app.globalData.imagePath = filePath
+
+        //     wx.navigateTo({
+        //       url: '../storageConsole/storageConsole'
+        //     })
+        //   },
+        //   fail: e => {
+        //     console.error('[上传文件] 失败：', e)
+        //     wx.showToast({
+        //       icon: 'none',
+        //       title: '上传失败',
+        //     })
+        //   },
+        //   complete: () => {
+        //     wx.hideLoading()
+        //   }
+        // })
 
       },
       fail: e => {
