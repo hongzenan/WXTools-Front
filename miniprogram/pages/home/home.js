@@ -88,6 +88,7 @@ Page({
   // 上传图片
   doUpload: function () {
     // 选择图片
+    var self = this
     wx.chooseImage({
       count: 1,
       sizeType: ['original', 'compressed'],
@@ -104,9 +105,27 @@ Page({
           filePath: filePath,
           name: 'file',
           url: 'http://localhost:8080/wxtools/fileUpload',
+          // responseType: 'arraybuffer',
+          header: {
+            'content-type': 'multipart/form-data',
+          },
           success: function(res) {
-            var data = res.data
-            console.log(data)
+            // let imageUrl = wx.arrayBufferToBase64(res.data)
+            let imageUrl = 'data:image/png;base64,'+wx.arrayBufferToBase64(res.data)
+            console.log("hello: " + imageUrl)
+            wx.navigateTo({
+              url: '../storageConsole/storageConsole?imageUrl=' + imageUrl,
+            })
+          },
+          fail: e => {
+            console.error('[上传文件] 失败：', e)
+            wx.showToast({
+              icon: 'none',
+              title: '上传失败',
+            })
+          },
+          complete: () => {
+            wx.hideLoading()
           }
         })
 

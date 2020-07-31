@@ -2,6 +2,9 @@
 <view class="container">
 
   <view class="list">
+  <view>
+  <image src="{{codeUrl}}"></image>
+  </view>
     <view class="list-item" bindtap="testCgi">
       <text class="black">上传成功</text>
     </view>
@@ -9,10 +12,10 @@
       <text class="request-text">文件 ID：{{fileID}}</text>
     </view>
     <view class="list-item">
-      <text class="request-text">云文件路径：{{cloudPath}}</text>
+      <text class="request-text">云文件路径：{{filePath}}</text>
     </view>
     <view class="list-item">
-      <image class="image1" src="{{imagePath}}" mode="aspectFit"></image>
+      <image class="image1" src="{{filePath}}" mode="aspectFit"></image>
       <view bindtap="downloadImage">下载</view>
     </view>
   </view>
