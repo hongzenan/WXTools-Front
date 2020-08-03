@@ -39,16 +39,33 @@ Page({
     var param = {fileName: this.data.tmpUrl}
     console.log("kane : " + this.data.tmpUrl)
     wx.request({
-      url: 'http://localhost:8080/wxtools/getImage',
+      url: 'http://192.168.37.123:8080/wxtools/getImage',
       data: param,
       method: "get",
       responseType: 'arraybuffer',
       success(res) {
         let imageUrl = 'data:image/png;base64,'+wx.arrayBufferToBase64(res.data)
-        console.log(imageUrl)
+        console.log(res)
         app.globalData.filePath = imageUrl
         self.setData({
           codeUrl:imageUrl
+        })
+      }
+    }),
+
+    wx.downloadFile({
+      url: 'http://192.168.37.123:8080/wxtools/getImage?fileName=' + this.data.tmpUrl,
+      method: "get",
+      success(res) {
+        console.log("tempFilePath: " + res.tempFilePath)
+        wx.saveImageToPhotosAlbum({
+          filePath: res.tempFilePath,
+          success(data) {
+            wx.showModal({
+              title: '下载成功',
+              content: '图片已保存至您的手机'
+            })
+          }
         })
       }
     })
