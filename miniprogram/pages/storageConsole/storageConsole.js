@@ -25,7 +25,7 @@ Page({
       fileID,
       cloudPath,
       imagePath,
-      codeUrl: tmpUrl
+      tmpUrl
     })
     
 
@@ -36,8 +36,11 @@ Page({
   downloadImage: function(options) {
 
     var self = this
+    var param = {fileName: this.data.tmpUrl}
+    console.log("kane : " + this.data.tmpUrl)
     wx.request({
       url: 'http://localhost:8080/wxtools/getImage',
+      data: param,
       method: "get",
       responseType: 'arraybuffer',
       success(res) {

@@ -111,7 +111,7 @@ Page({
           },
           success: function(res) {
             // let imageUrl = wx.arrayBufferToBase64(res.data)
-            let imageUrl = 'data:image/png;base64,'+wx.arrayBufferToBase64(res.data)
+            let imageUrl = res.data
             console.log("hello: " + imageUrl)
             wx.navigateTo({
               url: '../storageConsole/storageConsole?imageUrl=' + imageUrl,
